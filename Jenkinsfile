@@ -45,7 +45,7 @@ pipeline {
     stage('Docker Build') {
       steps {
         sh """
-          docker build -t ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG} app
+          docker build -t ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG} .
         """
       }
     }
