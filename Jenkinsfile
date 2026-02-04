@@ -96,8 +96,12 @@ pipeline {
   steps {
     dir(env.WORKSPACE) {
       sh '''
-        # ✅ Fix Git "dubious ownership" issue
+        # Fix Git safety issue
         git config --global --add safe.directory "$PWD"
+
+        # Ensure we are on main branch (FIX for detached HEAD)
+        git fetch origin main
+        git checkout main
 
         git status
 
