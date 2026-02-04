@@ -4,7 +4,7 @@ pipeline {
       image 'maven:3.9.12-eclipse-temurin-21'
       args '''
         -v /var/run/docker.sock:/var/run/docker.sock
-        -v $HOME/.m2:/root/.m2
+        -v /var/lib/jenkins/.m2:/home/jenkins/.m2
       '''
       reuseNode true
     }
@@ -24,7 +24,7 @@ pipeline {
     // GitHub credentials (PAT)
     GIT_CREDS = credentials('github-creds')
 
-    MAVEN_OPTS = "-Dmaven.repo.local=/root/.m2/repository"
+    MAVEN_OPTS = "-Dmaven.repo.local=/home/jenkins/.m2/repository"
   }
 
   stages {
