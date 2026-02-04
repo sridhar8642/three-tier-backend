@@ -4,11 +4,12 @@ pipeline {
     image 'maven:3.9.12-eclipse-temurin-21'
     args '''
       -v /var/run/docker.sock:/var/run/docker.sock
+      -v /usr/bin/docker:/usr/bin/docker
       -v /var/lib/jenkins/.m2:/home/jenkins/.m2
       -v /var/lib/jenkins/.sonar:/home/jenkins/.sonar
     '''
     reuseNode true
-    }
+  }
   }
 
   environment {
