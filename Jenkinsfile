@@ -9,12 +9,18 @@ pipeline {
   }
 
   environment {
-    DOCKERHUB_USER = 'YOUR_DOCKERHUB_USERNAME'
-    IMAGE_NAME = 'three-tier-backend'
-    IMAGE_TAG = "${BUILD_NUMBER}"
-    SONAR_HOST = 'http://SONAR_EC2_IP:9000'
+    // DockerHub
+    DOCKERHUB_USER = 'sridhar145'
+    IMAGE_NAME     = 'three-tier-backend'
+    IMAGE_TAG      = "${BUILD_NUMBER}"
+    DOCKER_PASS    = credentials('dockerhub-password')
+
+    // SonarQube
+    SONAR_HOST  = 'http://43.205.139.198:9000'
     SONAR_TOKEN = credentials('sonar-token')
-    DOCKER_PASS = credentials('dockerhub-password')
+
+    // GitHub credentials (PAT)
+    GIT_CREDS = credentials('github-creds')
   }
 
   stages {
@@ -28,6 +34,8 @@ pipeline {
     stage('Build with Maven') {
       steps {
         sh 'mvn clean package'
+        // If you have mvnw, prefer:
+        // sh './mvnw clean package'
       }
     }
 
@@ -35,12 +43,23 @@ pipeline {
       steps {
         sh """
           mvn sonar:sonar \
-          -Dsonar.projectKey=three-tier-backend \
-          -Dsonar.host.url=${SONAR_HOST} \
-          -Dsonar.login=${SONAR_TOKEN}
+            -Dsonar.projectKey=three-tier-backend \
+            -Dsonar.host.url=${SONAR_HOST} \
+            -Dsonar.login=${SONAR_TOKEN}
         """
       }
     }
+
+    /*
+    // OPTIONAL but RECOMMENDED
+    stage('Quality Gate') {
+      steps {
+        timeout(time: 5, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
+      }
+    }
+    */
 
     stage('Docker Build') {
       steps {
@@ -64,12 +83,13 @@ pipeline {
         sh '''
           sed -i "s|image:.*|image: '"${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}"'|" manifests/deployment.yaml
 
-          git config user.name "jenkins"
-          git config user.email "jenkins@ci.local"
+          git config user.name "sridhar8642"
+          git config user.email "sridhareswar3@gmail.com"
 
           git add manifests/deployment.yaml
           git commit -m "Update image to ${IMAGE_TAG}"
-          git push origin main
+
+          git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/sridhar8642/three-tier-backend.git main
         '''
       }
     }
