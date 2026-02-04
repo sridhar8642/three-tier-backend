@@ -3,13 +3,13 @@ pipeline {
   docker {
     image 'maven:3.9.12-eclipse-temurin-21'
     args '''
+      --user root
       -v /var/run/docker.sock:/var/run/docker.sock
-      -v /usr/bin/docker:/usr/bin/docker
-      -v /var/lib/jenkins/.m2:/home/jenkins/.m2
-      -v /var/lib/jenkins/.sonar:/home/jenkins/.sonar
+      -v /var/lib/jenkins/.m2:/root/.m2
+      -v /var/lib/jenkins/.sonar:/root/.sonar
     '''
     reuseNode true
-  }
+    }
   }
 
   environment {
@@ -26,8 +26,8 @@ pipeline {
     // GitHub credentials (PAT)
     GIT_CREDS = credentials('github-creds')
 
-    MAVEN_OPTS = "-Dmaven.repo.local=/home/jenkins/.m2/repository"
-    SONAR_USER_HOME = "/home/jenkins/.sonar"
+    MAVEN_OPTS      = "-Dmaven.repo.local=/root/.m2/repository"
+    SONAR_USER_HOME = "/root/.sonar"
   }
 
   stages {
