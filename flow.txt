@@ -1,0 +1,68 @@
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Tools |
+|-------|------|
+| CI/CD | Jenkins |
+| Build Tool | Maven |
+| Language | Java (Spring Boot) |
+| Code Quality | SonarQube |
+| Containerization | Docker |
+| Container Registry | Docker Hub |
+| CD / GitOps | Argo CD |
+| Orchestration | Kubernetes (Minikube) |
+| Cloud | AWS EC2 (Jenkins, SonarQube) |
+
+---
+
+
+---
+
+## ⚙️ Jenkins Pipeline Stages
+
+1. **Checkout**
+2. **Build with Maven**
+3. **SonarQube Analysis**
+4. **Docker Build**
+5. **Docker Push**
+6. **Update Kubernetes Manifest (GitOps)**
+7. **Argo CD Auto Deployment**
+
+---
+
+## 🔍 SonarQube Integration
+
+- SonarQube runs static code analysis
+- Enforces quality standards
+- Integrated securely using Jenkins credentials
+- Supports quality gate enforcement
+
+---
+
+## 🐳 Docker Workflow
+
+- Application packaged as a JAR
+- Docker image built using custom CI image
+- Image pushed to Docker Hub with versioned tags
+- Credentials managed via Jenkins secrets
+
+---
+
+## ☸️ Kubernetes & Argo CD (GitOps)
+
+- Kubernetes manifests stored in Git
+- Jenkins updates only the image tag
+- Argo CD continuously watches the repository
+- Automatic sync & deployment to Minikube
+- No `kubectl apply` in CI pipeline
+
+---
+
+## 🌐 Application Access
+
+For Minikube (Windows/macOS):
+
+```bash
+minikube service three-tier-backend
