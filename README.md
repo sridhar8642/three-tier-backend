@@ -1,4 +1,4 @@
-# 🚀 Three-Tier Application CI/CD with Jenkins, SonarQube, Argo CD & Kubernetes
+# 🚀 Backend Application CI/CD with Jenkins, SonarQube, Argo CD & Kubernetes
 
 This project demonstrates a **production-grade CI/CD and GitOps pipeline** for a Spring Boot application using **Jenkins, Docker, SonarQube, Argo CD, and Kubernetes (Minikube)**.
 
