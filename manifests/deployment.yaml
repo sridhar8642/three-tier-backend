@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: backend
-          image: sridhar145/three-tier-backend:test
+          image: sridhar145/three-tier-backend:13
           ports:
             - containerPort: 8080
