@@ -92,10 +92,13 @@ pipeline {
     }
   }
 
-    stage('Update Kubernetes Manifest') {
-      steps {
+   stage('Update Kubernetes Manifest') {
+  steps {
     dir(env.WORKSPACE) {
       sh '''
+        # ✅ Fix Git "dubious ownership" issue
+        git config --global --add safe.directory "$PWD"
+
         git status
 
         sed -i "s|image:.*|image: ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}|" manifests/deployment.yaml
@@ -104,13 +107,14 @@ pipeline {
         git config user.email "sridhareswar3@gmail.com"
 
         git add manifests/deployment.yaml
-        git commit -m "Update image to ${IMAGE_TAG}"
+        git commit -m "Update image to ${IMAGE_TAG}" || echo "No changes to commit"
 
         git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/sridhar8642/three-tier-backend.git main
       '''
     }
   }
 }
+
 
   }
 }
