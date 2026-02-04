@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: backend
-          image: YOUR_DOCKERHUB_USERNAME/three-tier-backend:1
+          image: sridhar145/three-tier-backend:test
           ports:
             - containerPort: 8080
