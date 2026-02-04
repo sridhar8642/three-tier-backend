@@ -43,16 +43,17 @@ pipeline {
       }
     }
 
-    stage('SonarQube Analysis') {
-      steps {
-        sh """
-          mvn sonar:sonar \
-            -Dsonar.projectKey=three-tier-backend \
-            -Dsonar.host.url=${SONAR_HOST} \
-            -Dsonar.login=${SONAR_TOKEN}
-        """
-      }
+   stage('SonarQube Analysis') {
+     steps {
+    sh '''
+      mvn sonar:sonar \
+        -Dsonar.projectKey=sridhar_three_tier_backend \
+        -Dsonar.projectName=three-tier-backend \
+        -Dsonar.host.url=http://43.205.139.198:9000 \
+        -Dsonar.login=$SONAR_TOKEN
+    '''
     }
+  }
 
     /*
     // OPTIONAL but RECOMMENDED
