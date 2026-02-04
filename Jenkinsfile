@@ -79,12 +79,18 @@ pipeline {
 
     stage('Docker Push') {
       steps {
-        sh """
-          echo ${DOCKER_PASS} | docker login -u ${DOCKERHUB_USER} --password-stdin
-          docker push ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
-        """
+    withCredentials([usernamePassword(
+      credentialsId: 'dockerhub-password',
+      usernameVariable: 'DOCKER_USER',
+      passwordVariable: 'DOCKER_TOKEN'
+    )]) {
+      sh '''
+        echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+        docker push ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
+      '''
       }
     }
+  }
 
     stage('Update Kubernetes Manifest') {
       steps {
