@@ -94,18 +94,23 @@ pipeline {
 
     stage('Update Kubernetes Manifest') {
       steps {
-        sh '''
-          sed -i "s|image:.*|image: '"${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}"'|" manifests/deployment.yaml
+    dir(env.WORKSPACE) {
+      sh '''
+        git status
 
-          git config user.name "sridhar8642"
-          git config user.email "sridhareswar3@gmail.com"
+        sed -i "s|image:.*|image: ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}|" manifests/deployment.yaml
 
-          git add manifests/deployment.yaml
-          git commit -m "Update image to ${IMAGE_TAG}"
+        git config user.name "sridhar8642"
+        git config user.email "sridhareswar3@gmail.com"
 
-          git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/sridhar8642/three-tier-backend.git main
-        '''
-      }
+        git add manifests/deployment.yaml
+        git commit -m "Update image to ${IMAGE_TAG}"
+
+        git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/sridhar8642/three-tier-backend.git main
+      '''
     }
+  }
+}
+
   }
 }
